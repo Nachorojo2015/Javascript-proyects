@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap"
+      rel="stylesheet"
+    />
+    <title>Music Player</title>
+    <style>
+      * {
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+        font-family: "Inter", sans-serif;
+      }
+
+      body {
+        background-image: url("assets/bg.jpg");
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background-color: rgba(4, 5, 6, 0.7);
+        gap: 20px;
+        padding: 20px;
+        border-radius: 20px;
+        width: 22%;
+        margin-top: 100px;
+      }
+
+      @media (width <= 768px) {
+        .container {
+          width: 100%;
+          margin-top: 70px;
+        }
+
+        body {
+          padding: 8px;
+        }
+      }
+
+      .container #song-image {
+        width: 300px;
+        border-radius: 20px;
+      }
+
+      .container .song-info {
+        text-align: center;
+      }
+
+      .container .song-info .name {
+        font-size: 16px;
+        color: #e5e7eb;
+        font-weight: 600;
+      }
+
+      .container .song-info .author {
+        font-size: 12px;
+        color: #4d5562;
+        margin-top: 5px;
+      }
+
+      .container .controls {
+        margin-top: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .container .controls .play-prev,
+      .play-next {
+        background: none;
+        border: none;
+        cursor: pointer;
+      }
+
+      .container .controls .play-prev {
+        margin-right: 20px;
+      }
+
+      .container .controls .play-next {
+        margin-left: 20px;
+      }
+
+      .container .controls .play-song,
+      .pause-song {
+        background-color: #c93b76;
+        color: #ffffff;
+        border: none;
+        border-radius: 100%;
+        width: 50px;
+        height: 50px;
+        box-shadow: 0 0 10px rgba(187, 210, 235, 0.375);
+        cursor: pointer;
+        transition: all 0.1s;
+      }
+
+      .container .controls .play-song:hover {
+        opacity: 0.5;
+      }
+
+      .container .controls .pause-song:hover {
+        opacity: 0.5;
+      }
+
+      .container .controls .play-pause {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .container .reproductor {
+        margin-top: 12px;
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        gap: 3px;
+      }
+
+      .container .reproductor .time {
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .container .reproductor .time span {
+        font-size: 10px;
+        color: #4d5562;
+      }
+
+      .hidden {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Contenedor -->
+    <article class="container">
+      <!-- Imagen de la canción -->
+      <img src="" alt="cover-image" id="song-image" />
+      <!-- Nombre de la canción y Autor -->
+      <div class="song-info">
+        <p class="name" id="song-name"></p>
+        <p class="author" id="song-author"></p>
+      </div>
+      <!-- Reproductor -->
+      <div class="reproductor">
+        <div class="time">
+          <span id="time-initial-song"></span>
+          <span id="time-final-song"></span>
+        </div>
+        <input type="range" class="bar" id="bar"/>
+      </div>
+      <!-- Controles de Audio -->
+      <div class="controls">
+        <!-- Boton Previo -->
+        <button class="play-prev" id="play-prev-song">
+          <img src="./assets/Stop_and_play_fill-1.svg" alt="prev-btn" />
+        </button>
+        <!-- Boton Play/Pause -->
+        <div class="play-pause">
+          <button class="play-song" id="play-song">
+            <img src="./assets/Play_fill.svg" alt="play-btn" />
+          </button>
+          <button class="pause-song hidden" id="pause-song">
+            <img src="./assets/Stop.svg" alt="pause-btn" />
+          </button>
+        </div>
+        <!-- Boton Siguiente -->
+        <button class="play-next" id="play-next-song">
+          <img src="./assets/Stop_and_play_fill.svg" alt="next-btn" />
+        </button>
+      </div>
+    </article>
+  </body>
+  <script>
+    // Canciones
+    const songs = [
+      {
+        urlImage: "./assets/cover-1.png",
+        name: "Lost in the City Lights",
+        author: "Cosmo Sheldrake",
+        urlSong: "./assets/lost-in-city-lights-145038.mp3",
+      },
+      {
+        urlImage: "./assets/cover-2.png",
+        name: "Forest Lullaby",
+        author: "Lesfm",
+        urlSong: "./assets/forest-lullaby-110624.mp3",
+      },
+    ];
+
+    // Cancíon seleccionada
+    let index = 0;
+
+    // Canción
+    const song = document.createElement("audio");
+
+    // Imagen de la canción
+    const songImage = document.getElementById("song-image");
+    // Nombre de la canción
+    const songName = document.getElementById("song-name");
+    // Nombre del autor de la canción
+    const songAuthor = document.getElementById("song-author");
+    // Tiempo inicial de la canción
+    const timeInitialSong = document.getElementById("time-initial-song");
+    // Tiempo Final de la canción
+    const timeFinalSong = document.getElementById("time-final-song");
+    // Barra de duración de la canción
+    const durationBar = document.getElementById("bar");
+    // Boton para reproducir canción previa
+    const playPrevSongBtn = document.getElementById("play-prev-song");
+    // Boton para reproducir la siguiente canción
+    const playNextSongBtn = document.getElementById("play-next-song");
+    // Boton para reproducir la canción actual
+    const playSongBtn = document.getElementById("play-song");
+    // Boton para detener la canción actual
+    const stopSongBtn = document.getElementById("pause-song");
+
+    // Funciones
+    function playSong() {
+      // Inicia la canción
+      song.play();
+      // Cambia el boton
+      playSongBtn.classList.add("hidden"); // Se elimina de la vista
+      stopSongBtn.classList.remove("hidden"); // Se incluye en la vista
+
+      // Reproduce según el valor de la barra de duración
+      song.currentTime = durationBar.value;
+    }
+
+    function stopSong() {
+      // Detiene la canción
+      song.pause();
+      // Cambia el boton
+      stopSongBtn.classList.add("hidden"); // Se elimina de la vista
+      playSongBtn.classList.remove("hidden"); // Se incluye en la vista
+    }
+
+    function updateSong() {
+      // Reinicia la canción a 0 (cero) segundos
+      song.currentTime = 0;
+
+      // Barra de duración de la canción se reinicia a 0 (cero)
+      durationBar.value = 0;
+
+      // Canción actualizada
+      song.src = songs[index].urlSong;
+
+      // Imágen de la canción
+      songImage.src = songs[index].urlImage;
+      // Nombre de la canción
+      songName.innerHTML = songs[index].name;
+      // Autor de la canción
+      songAuthor.innerHTML = songs[index].author;
+      // Tiempo inicial de la canción
+      timeInitialSong.innerHTML = formatTime(song.currentTime);
+      // Espera a que se carguen los metadatos del audio
+      song.addEventListener("loadedmetadata", () => {
+        // Tiempo final de la canción
+        timeFinalSong.innerHTML = formatTime(song.duration);
+        // Establece el tiempo máximo de la barra según la duración de la canción
+        durationBar.max = song.duration;
+      });
+    }
+
+    function formatTime(time) {
+      // Calcula los minutos dividiendo el tiempo total (en segundos) entre 60
+      // y redondea hacia abajo al número entero más cercano.
+      const minutes = Math.floor(time / 60);
+
+      // Calcula los segundos restantes después de obtener los minutos
+      // utilizando el operador módulo (%) y redondea hacia abajo al número entero más cercano.
+      const remainingSeconds = Math.floor(time % 60);
+
+      // Convierte los segundos restantes a una cadena y añade un cero a la izquierda si es necesario,
+      // asegurándose de que siempre haya al menos dos dígitos en la representación de los segundos.
+      const paddedSeconds = remainingSeconds.toString().padStart(2, "0");
+
+      // Retorna una cadena en el formato "mm:ss" usando los minutos calculados
+      // y los segundos restantes con el padding aplicado.
+      return `${minutes}:${paddedSeconds}`;
+    }
+
+    function changeNextSong() {
+      index = 1;
+      updateSong();
+      playSong();
+    }
+
+    function changePrevSong() {
+      index = 0;
+      updateSong();
+      playSong();
+    }
+
+    function updateCurrencySong(e) {
+      song.currentTime = e.target.value;
+    }
+
+    function onPlayingSong() {
+      // Actualizar el tiempo transcurrido de la canción
+      timeInitialSong.innerHTML = formatTime(song.currentTime);
+      // Actualizar el valor de la barra de duración de la canción
+      durationBar.value = song.currentTime;
+      // Si la canción ya termina pasa a la siguiente
+      if (song.currentTime === song.duration) {
+        // Siguiente Canción
+        if (index === 0) {
+          changeNextSong();
+        } else {
+        // Previa canción
+          changePrevSong();
+        }
+      }
+    }
+
+    // Actualizar canción
+    updateSong();
+
+    // Eventos
+    playSongBtn.addEventListener("click", playSong);
+    stopSongBtn.addEventListener("click", stopSong);
+    playPrevSongBtn.addEventListener("click", changePrevSong);
+    playNextSongBtn.addEventListener("click", changeNextSong);
+    durationBar.addEventListener("change", updateCurrencySong);
+    song.addEventListener("timeupdate", onPlayingSong);
+  </script>
+</html>
