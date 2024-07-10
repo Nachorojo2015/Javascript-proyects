@@ -40,10 +40,6 @@
         right: -250px;
       }
 
-      .hidden {
-        display: none;
-      }
-
       .container {
         background-color: #212936;
         padding: 30px;
@@ -64,14 +60,18 @@
         font-size: 20px;
       }
 
-      .container .steps label {
+      .container .steps #step-one {
+        margin-top: 54px;
+      }
+
+      .container .steps #step-one label {
         font-size: 12px;
         color: #a1a1a9;
         display: block;
-        margin-top: 30px;
+        margin-top: 40px;
       }
 
-      .container .steps input {
+      .container .steps #step-one input {
         border-radius: 10px;
         padding: 14px;
         border: 2px solid #4d5562;
@@ -81,20 +81,68 @@
         width: 100%;
       }
 
-      .container .steps input::placeholder {
+      .container .steps #step-one input::placeholder {
         font-size: 12px;
+      }
+
+      .container .steps #step-two {
+        margin-top: 40px;
+      }
+
+      .container .steps #step-two div {
+        margin-top: 20px;
+        background-color: #394150;
+        padding: 16px;
+        border-radius: 10px;
+        color: #a1a1a9;
+        border: 1px solid #a1a1a9;
+        font-size: 14px;
+        cursor: pointer;
+      }
+
+      .container .steps #step-three .data-user {
+        margin-top: 50px;
+      }
+
+      .container .steps #step-three .data-user p {
+        color: #A1A1A9;
+        font-weight: 600;
+        margin-top: 8px;
+      }
+
+      .container .steps #step-three .data-user b {
+        color: #E5E7EB;
+      }
+
+      .container .steps #step-three .topics-user {
+        margin-top: 50px;
+      }
+
+      .container .steps #step-three .topics-user p {
+        color: #A1A1A9;
+        font-weight: 600;
+      }
+
+      .container .steps #step-three .topics-user li {
+        color: #E5E7EB;
+        margin-top: 8px;
+      }
+
+      .container .steps #step-three .topics-user ul {
+        margin-left: 20px;
       }
 
       .container .btn {
         background: linear-gradient(to top, #652cd1, #845eee);
         border: none;
         color: #e5e7eb;
-        padding: 12px 30px 12px 30px;
+        padding: 12px 40px 12px 40px;
         border-radius: 30px;
         display: block;
         text-align: center;
         margin: auto;
         cursor: pointer;
+        font-size: 12px;
         transition: all 0.1s;
       }
 
@@ -109,26 +157,41 @@
       .container-steps {
         display: flex;
         align-items: center;
-        gap: 20px;
+        gap: 26px;
+        margin-top: 3px;
       }
 
       .container-steps p {
-        color: #4D5562;
+        color: #4d5562;
         font-size: 12px;
       }
 
       .container-steps div {
         display: flex;
-        gap: 10px;
+        gap: 14px;
       }
 
       .container-steps div span {
-        background-color: #4D5562;
+        background-color: #4d5562;
         width: 10px;
         height: 10px;
         display: block;
         border-radius: 100%;
         cursor: pointer;
+      }
+
+      .container .steps #step-two .selected {
+        background-color: #845eee;
+        color: #e5e7eb;
+      }
+
+      .container-steps div .iluminated {
+        background-color: #845EEE;
+        box-shadow: 0 0 10px #845EEE, 0 0 10px #845EEE, 0 0 10px #845EEE, 0 0 10px #845EEE;
+      }
+
+      .container-steps div {
+        margin-right: 70px;
       }
     </style>
   </head>
@@ -141,36 +204,139 @@
       <!-- Titulo -->
       <h1 class="title" id="title-form">Register</h1>
       <!-- Formulario -->
-      <div class="steps">
-        <label for="name">Name</label>
-        <input type="text" placeholder="enter your name" id="name-user"/>
-        <label for="email">Email</label>
-        <input type="email" placeholder="example@gmail.com" id="email-user"/>
-      </div>
+      <article class="steps">
+        <!-- Primera parte -->
+        <div id="step-one">
+          <label for="name">Name</label>
+          <input type="text" placeholder="enter your name" id="name-user" />
+          <label for="email">Email</label>
+          <input type="email" placeholder="example@gmail.com" id="email-user" />
+        </div>
+        <!-- Segunda parte -->
+        <div id="step-two" style="display: none;">
+          <div>Software Development</div>
+          <div>User Experience</div>
+          <div>Graphic Design</div>
+        </div>
+        <!-- Tercera parte -->
+        <div id="step-three" style="display: none;">
+          <div class="data-user">
+            <p>Name: <b id="name-user-text"></b></p>
+            <p>Email: <b id="email-user-text"></b></p>
+          </div>
+          <div class="topics-user">
+            <p>Topics:</p>
+            <ul id="topics">
+            </ul>
+          </div>
+        </div>
+      </article>
       <!-- Boton para continuar -->
       <div class="container-btn">
         <button class="btn" id="continue-btn">Continue</button>
       </div>
     </section>
     <div class="container-steps">
-      <p>Step 1 of 3</p>
+      <p id="steps-counter">Step 1 of 3</p>
       <div>
-        <span></span>
-        <span></span>
-        <span></span>
+        <span class="iluminated" id="first-step"></span>
+        <span id="second-step"></span>
+        <span id="third-step"></span>
       </div>
     </div>
     <script>
+      // Usuario
+      const user = {
+        name: "",
+        email: "",
+        topics: [],
+      };
+
       // Número de paso
       let step = 1;
 
       // Contenido del formulario
       const $titleForm = document.getElementById("title-form");
       const $continueBtn = document.getElementById("continue-btn");
+      const $stepsCounter = document.getElementById("steps-counter");
+      const $stepOne = document.getElementById("step-one");
+      const $stepTwo = document.getElementById("step-two");
+      const $stepThree = document.getElementById("step-three");
+      const $firstStepSpan = document.getElementById("first-step");
+      const $secondStepSpan = document.getElementById("second-step");
+      const $thirdStepSpan = document.getElementById("third-step");
 
-      // Datos del usuario
+      
       const $nameUser = document.getElementById("name-user");
       const $emailUser = document.getElementById("email-user");
+      const $nameUserText = document.getElementById("name-user-text");
+      const $emailUserText = document.getElementById("email-user-text");
+      const $topics = document.getElementById("topics");
+
+      // Funciones
+      function updateData() {
+        if (step === 1) {
+          // Guardar nombre del usuario
+          user.name = $nameUser.value;
+          // Guardar email del usuario
+          user.email = $emailUser.value;
+
+          // Cambiar titulo del formulario
+          $titleForm.innerHTML = "Which topics you are interested in?";
+          // Remover primera parte del formulario
+          $stepOne.style.display = "none";
+          // Mostar segunda parte del formulario
+          $stepTwo.style.display = "block";
+
+          // Funcion para seleccionar los tópicos
+          $stepTwo.querySelectorAll("div").forEach((e) => {
+            e.addEventListener("click", selectTopics);
+          });
+
+          // Marca el segundo paso
+          $firstStepSpan.classList.remove("iluminated");
+          $secondStepSpan.classList.add("iluminated");
+        } else if (step === 2) {
+          // Introduce el nombre en la vista
+          $nameUserText.innerHTML = user.name;
+          // Introduce el email en la vista
+          $emailUserText.innerHTML = user.email;
+
+          // Guardar los tópicos seleccionados
+          user.topics.forEach(t => {
+            $topics.innerHTML += `<li>${t}</li>`
+          })
+
+          // Cambiar titulo del formulario
+          $titleForm.innerHTML = "Summary";
+          // Remover segunda parte del formulario
+          $stepTwo.style.display = "none";
+          // Mostrar tercera parte del formulario
+          $stepThree.style.display = "block";
+
+          // Marca el tercer paso
+          $secondStepSpan.classList.remove("iluminated");
+          $thirdStepSpan.classList.add("iluminated");
+        }
+        step += step >= 3 ? 0 : 1;
+        $stepsCounter.innerHTML = `Step ${step} of 3`;
+      }
+
+      function selectTopics(e) {
+        // Obtener el elemento seleccionado
+        if (e.target.classList.contains("selected")){
+          const indexTopic = user.topics.findIndex(s => s === e.target.textContent)
+          user.topics.splice(indexTopic, 1);
+        } else {
+          user.topics.push(e.target.textContent);
+        }
+
+        // Cambiar los estilos
+        e.target.classList.toggle("selected");
+      }
+
+      // Eventos
+      $continueBtn.addEventListener("click", updateData);
     </script>
   </body>
 </html>
