@@ -323,12 +323,13 @@
       durationBar.value = song.currentTime;
       // Si la canción ya termina pasa a la siguiente
       if (song.currentTime === song.duration) {
-        // Siguiente Canción
-        if (index === 0) {
-          changeNextSong();
+        // Si esta en la última canción se detiene la lista
+        if (index === songs.length - 1) {
+          stopSong();
+          song.currentTime = 0;
         } else {
-          // Previa canción
-          changePrevSong();
+          // Siguiente Canción
+          changeNextSong();
         }
       }
     }
