@@ -51,6 +51,7 @@
 
       .container #song-image {
         width: 300px;
+        height: 280px;
         border-radius: 20px;
       }
 
@@ -159,7 +160,7 @@
           <span id="time-initial-song"></span>
           <span id="time-final-song"></span>
         </div>
-        <input type="range" class="bar" id="bar"/>
+        <input type="range" class="bar" id="bar" />
       </div>
       <!-- Controles de Audio -->
       <div class="controls">
@@ -197,6 +198,12 @@
         name: "Forest Lullaby",
         author: "Lesfm",
         urlSong: "./assets/forest-lullaby-110624.mp3",
+      },
+      {
+        urlImage: "./assets/cover-3.png",
+        name: "Interestellar (Main Theme)",
+        author: "Hans Zimmer",
+        urlSong: "./assets/interstellar-main-theme.mp3",
       },
     ];
 
@@ -293,13 +300,14 @@
     }
 
     function changeNextSong() {
-      index = 1;
+      index += index === songs.length - 1 ? 0 : 1;
       updateSong();
       playSong();
     }
 
     function changePrevSong() {
-      index = 0;
+      index -= index === 0 ? 0 : 1;
+      console.log(index);
       updateSong();
       playSong();
     }
@@ -319,7 +327,7 @@
         if (index === 0) {
           changeNextSong();
         } else {
-        // Previa canción
+          // Previa canción
           changePrevSong();
         }
       }

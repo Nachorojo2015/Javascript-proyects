@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Monkey Type</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Roboto Mono", monospace;
+      }
+
+      body {
+        display: grid;
+        place-content: center;
+        background-color: #323437;
+        color: #646669;
+        height: 80vh;
+      }
+
+      section {
+        margin: auto;
+        max-width: 80%;
+        padding: 8px;
+      }
+
+      section time {
+        color: #f0c674;
+        font-size: 20px;
+      }
+
+      section p {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 3px 8px;
+        font-size: 24px;
+        margin-top: 8px;
+      }
+
+      section p letter {
+        position: relative;
+        &.active::before {
+          content: "|";
+          position: absolute;
+          left: -60%;
+          color: #f0c674;
+          transition: 0.1s;
+        }
+
+        &.is-end::before {
+          left: 60%;
+          transition: 0.1s;
+        }
+
+        &.correct {
+          color: #fff;
+        }
+
+        &.wrong {
+          color: red;
+        }
+      }
+
+      section p word {
+        border-bottom: 2px solid transparent;
+        transition: 0.5s;
+        &.active {
+          color: aqua;
+        }
+
+        &.wrong {
+          border-bottom: 1px solid red;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <section>
+      <time></time>
+      <p></p>
+    </section>
+  </body>
+
+  <script type="module">
+    import { words as ALL_WORDS } from "./data.js";
+
+    const $time = document.querySelector("time");
+    const $words = document.querySelector("p");
+
+    let INITIAL_TIME = 30;
+
+    // Funciones
+    function generateWords() {
+      for (let i = 0; i < 30; i++) {
+        const randomWord =
+          ALL_WORDS[Math.floor(Math.random() * ALL_WORDS.length)];
+        const letters = [];
+        const word = document.createElement("word");
+        for (let j = 0; j < randomWord.length; j++) {
+          word.innerHTML += `<letter>${randomWord[j]}</letter>`;
+        }
+        $words.appendChild(word);
+      }
+
+      const $firstWord = $words.querySelector("word");
+      const $firstLetter = $firstWord.querySelector("letter");
+      $firstWord.classList.add("active");
+      $firstLetter.classList.add("active");
+    }
+
+    function startTime() {
+      $time.textContent = INITIAL_TIME;
+      const timeInterval = setInterval(() => {
+        INITIAL_TIME -= 1;
+        $time.textContent = INITIAL_TIME;
+
+        if (INITIAL_TIME === 0) {
+          clearInterval(timeInterval);
+          // gameOver();
+        }
+      }, 1000);
+    }
+
+    function gameOver() {
+      $time.style.display = "none";
+      $words.style.display = "none";
+    }
+
+    function startGame() {
+      generateWords();
+      startTime();
+    }
+
+    startGame();
+
+    function write(e) {
+      // Palabra activa en el momento
+      let $activeWord = $words.querySelector("word.active");
+      // Letra activa de la palabra en el momento
+      let $activeLetter = $activeWord.querySelector("letter.active");
+
+      // Letra que ingresa el usuario
+      const letterSelected = e.key;
+
+      // Caracteres / Letras no aceptadas
+      const noAcceptedLetter = [
+        "Control",
+        "Alt",
+        "AltGraph",
+        "Enter",
+        "ArrowUp",
+        "ArrowDown",
+        "ArrowRight",
+        "ArrowLeft",
+      ];
+
+      // Si la palabra ingresada no es aceptada, no ejecuta nada
+      if (noAcceptedLetter.includes(letterSelected)) return;
+
+      // Cuando se borra una letra
+      if (letterSelected === "Backspace") {
+        const $prevLetter = $activeLetter?.previousElementSibling;
+        // Si la letra anterior existe
+        if ($prevLetter) {
+          if ($activeLetter.classList.contains("is-end")) {
+            $activeLetter.classList.remove("is-end", "correct", "wrong");
+            $activeLetter.classList.add("active");
+          } else {
+            $prevLetter.classList.add("active");
+            $prevLetter.classList.remove("correct", "wrong");
+            $activeLetter.classList.remove("active");
+          }
+        } else {
+          const $prevWord = $activeWord.previousElementSibling;
+          // Si la palabra anterior existe
+          if ($prevWord) {
+            $prevWord.classList.add("active");
+            $prevWord.classList.remove("correct", "wrong");
+            const allLettersPrevWord = [
+              ...$prevWord.querySelectorAll("letter"),
+            ].reverse();
+            const $prevLetter = allLettersPrevWord.find(
+              (letter) =>
+                letter.classList.contains("correct") ||
+                letter.classList.contains("wrong")
+            );
+            $prevLetter.classList.add("active");
+            $activeWord.classList.remove("active");
+            $activeLetter.classList.remove("active", "is-end");
+          } else {
+            return;
+          }
+        }
+        return;
+      }
+
+      // Cuando el usuario hace un espacio
+      if (letterSelected === " ") {
+        const $nextWord = $activeWord.nextElementSibling;
+        if ($nextWord) {
+          $nextWord.classList.add("active");
+          $nextWord.querySelector("letter").classList.add("active");
+
+          $activeWord.classList.remove("active");
+          $activeWord.querySelectorAll("letter").forEach((letter) => {
+            if (
+              letter.classList.contains("wrong") ||
+              !letter.classList.contains("correct")
+            )
+              $activeWord.classList.add("wrong");
+          });
+          $activeWord
+            .querySelectorAll("letter")
+            .forEach((letter) => letter.classList.remove("active", "is-end"));
+        }
+        return;
+      }
+
+      $activeLetter.classList.add(
+        `${letterSelected === $activeLetter.textContent ? "correct" : "wrong"}`
+      );
+
+      // Automaticamente salta a la siguiente letra
+      const $nextLetter = $activeLetter.nextElementSibling;
+      $activeLetter.classList.remove("active");
+      if ($nextLetter) {
+        $nextLetter.classList.add("active");
+      } else {
+        $activeLetter.classList.add("active", "is-end");
+      }
+    }
+
+    // Eventos
+    window.addEventListener("keydown", write);
+  </script>
+</html>
