@@ -93,6 +93,7 @@
         display: block;
         margin: auto;
         color: #fff;
+        margin-top: 10px;
 
         &:hover {
           color: #f0c674;
@@ -185,10 +186,12 @@
       const correctWords = $words.querySelectorAll("word.correct").length;
       const wrongLetters = $words.querySelectorAll("letter.wrong").length;
       const correctLetters = $words.querySelectorAll("letter.correct").length;
-      const allLetters = $words.querySelectorAll("letter").length;
+      const incorrectLetters = $words.querySelectorAll("letter.wrong").length;
+
+      const totalLetters = correctLetters + incorrectLetters;
 
       const wpm = correctWords * 60 / INITIAL_TIME;
-      const acc = (correctLetters / allLetters) * 100;
+      const acc = (correctLetters / totalLetters) * 100;
 
       $wpm.textContent = wpm.toFixed(2);
       $acc.textContent = `${acc.toFixed(2)}%`;
