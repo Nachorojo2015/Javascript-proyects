@@ -80,12 +80,54 @@
           border-bottom: 1px solid red;
         }
       }
+
+      /* #game-over {
+        display: none;
+      } */
+
+      #game-over #reset {
+        background: none;
+        border: none;
+        cursor: pointer;
+        transition: 0.3s;
+        display: block;
+        margin: auto;
+        color: #fff;
+
+        &:hover {
+          color: #f0c674;
+          transition: 0.3s;
+        }
+      }
     </style>
   </head>
   <body>
     <section>
       <time></time>
       <p></p>
+    </section>
+    <section id="game-over">
+      <p>WPM: <span id="wpm"></span></p>
+      <p>ACC: <span id="acc"></span></p>
+      <button id="reset">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="icon icon-tabler icons-tabler-outline icon-tabler-restore"
+        >
+          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+          <path d="M3.06 13a9 9 0 1 0 .49 -4.087" />
+          <path d="M3 4.001v5h5" />
+          <path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+        </svg>
+      </button>
     </section>
   </body>
 
@@ -94,11 +136,16 @@
 
     const $time = document.querySelector("time");
     const $words = document.querySelector("p");
+    const $gameOver = document.getElementById("game-over");
+    const $wpm = document.getElementById("wpm");
+    const $acc = document.getElementById("acc");
+    const $reset = document.getElementById("reset");
 
-    let INITIAL_TIME = 30;
+    const INITIAL_TIME = 30;
 
     // Funciones
     function generateWords() {
+      $words.innerHTML = "";
       for (let i = 0; i < 30; i++) {
         const randomWord =
           ALL_WORDS[Math.floor(Math.random() * ALL_WORDS.length)];
@@ -117,6 +164,7 @@
     }
 
     function startTime() {
+      let INITIAL_TIME = 30;
       $time.textContent = INITIAL_TIME;
       const timeInterval = setInterval(() => {
         INITIAL_TIME -= 1;
@@ -124,7 +172,7 @@
 
         if (INITIAL_TIME === 0) {
           clearInterval(timeInterval);
-          // gameOver();
+          gameOver();
         }
       }, 1000);
     }
@@ -132,9 +180,26 @@
     function gameOver() {
       $time.style.display = "none";
       $words.style.display = "none";
+      $gameOver.style.display = "block";
+
+      const correctWords = $words.querySelectorAll("word.correct").length;
+      const wrongLetters = $words.querySelectorAll("letter.wrong").length;
+      const correctLetters = $words.querySelectorAll("letter.correct").length;
+      const allLetters = $words.querySelectorAll("letter").length;
+
+      const wpm = correctWords * 60 / INITIAL_TIME;
+      const acc = (correctLetters / allLetters) * 100;
+
+      $wpm.textContent = wpm.toFixed(2);
+      $acc.textContent = `${acc.toFixed(2)}%`;
+
+      $reset.addEventListener("click", startGame);
     }
 
     function startGame() {
+      $time.style.display = "block";
+      $words.style.display = "flex";
+      $gameOver.style.display = "none";
       generateWords();
       startTime();
     }
@@ -192,7 +257,7 @@
                 letter.classList.contains("correct") ||
                 letter.classList.contains("wrong")
             );
-            $prevLetter.classList.add("active");
+            $prevLetter.classList.add("is-end", "active");
             $activeWord.classList.remove("active");
             $activeLetter.classList.remove("active", "is-end");
           } else {
@@ -210,13 +275,17 @@
           $nextWord.querySelector("letter").classList.add("active");
 
           $activeWord.classList.remove("active");
-          $activeWord.querySelectorAll("letter").forEach((letter) => {
-            if (
+
+          const haveWrongLetters = [
+            ...$activeWord.querySelectorAll("letter"),
+          ].filter(
+            (letter) =>
               letter.classList.contains("wrong") ||
               !letter.classList.contains("correct")
-            )
-              $activeWord.classList.add("wrong");
-          });
+          );
+          $activeWord.classList.add(
+            `${haveWrongLetters.length > 0 ? "wrong" : "correct"}`
+          );
           $activeWord
             .querySelectorAll("letter")
             .forEach((letter) => letter.classList.remove("active", "is-end"));
