@@ -1,0 +1,17 @@
+---
+import { PROYECTS } from "../data";
+import Layout from "../layouts/Layout.astro";
+
+export function getStaticPaths() {
+  return PROYECTS.map((project) => ({ params: { project: project.name } }));
+}
+
+const { project } = Astro.params;
+
+
+---
+
+<Layout title=`${project}`>
+  <iframe title={project} src={`/proyects/${project}/index.html`} class="w-screen h-dvh"
+  ></iframe>
+</Layout>

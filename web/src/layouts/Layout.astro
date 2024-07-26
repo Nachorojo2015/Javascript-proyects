@@ -1,0 +1,65 @@
+---
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content="Astro description" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Dosis:wght@200..800&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap"
+      rel="stylesheet"
+    />
+    <title>{title}</title>
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>
+<style is:global>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Dosis", sans-serif;
+  }
+
+  body {
+    position: relative;
+    background-color: whitesmoke;
+  }
+
+  /* Minimalist Scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px; /* Ancho del scrollbar */
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #f0f0f0; /* Color del track (fondo) */
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #888; /* Color del thumb (barra deslizante) */
+    border-radius: 4px; /* Bordes redondeados */
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555; /* Color del thumb al pasar el cursor por encima */
+  }
+
+  /* Para Firefox */
+  * {
+    scrollbar-width: thin; /* Ancho del scrollbar */
+    scrollbar-color: #888 #f0f0f0; /* Color del thumb y del track */
+  }
+</style>

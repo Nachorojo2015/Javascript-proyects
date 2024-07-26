@@ -1,0 +1,81 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { PROYECTS } from "../data";
+import Github from "../icons/Github.astro";
+import Web from "../icons/Web.astro";
+import JavaScript from "../icons/JavaScript.astro";
+---
+
+<Layout title="Proyectos con Javascript Vanilla">
+  <div class="absolute top-0 right-3 flex items-center gap-3">
+    <p class="font-bold">
+      Hecho por <a
+        href="https://www.linkedin.com/in/ignacio-gomez-523b03258/"
+        target="_blank"
+        class="text-blue-600 transition hover:text-blue-400"
+        >Ignacio Gómez Rodríguez</a
+      >
+    </p>
+    <img
+      src="https://avatars.githubusercontent.com/u/102544177?v=4"
+      alt="image-profile-github"
+      class="w-12 h-12 rounded-md"
+    />
+  </div>
+  <section class="flex justify-center items-center mt-3">
+    <h1 class="font-bold text-3xl max-w-[230px]">
+      Proyectos hechos con JavaScript
+    </h1>
+    <JavaScript />
+  </section>
+  <section class="mt-12 grid place-items-center grid-cols-3 gap-3">
+    {
+      PROYECTS.map((proyect) => (
+        <div class="max-w-[400px] bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+          <a href={`${proyect.web}`}>
+            <img
+              class="rounded-t-lg h-[300px] w-full object-cover"
+              src={`images/${proyect.name}-pick.png`}
+              alt=""
+            />
+          </a>
+          <div class="p-5">
+            <a href="#">
+              <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                {proyect.title}
+              </h5>
+            </a>
+            <p class="mb-4 font-normal text-gray-700 dark:text-gray-400">
+              {proyect.description}
+            </p>
+            <div class="mb-5 flex flex-wrap gap-3">
+              {proyect.tags.map((tag) => (
+                <span class="bg-zinc-200 p-1 px-2 rounded-md font-bold">
+                  {tag}
+                </span>
+              ))}
+            </div>
+            <a
+              href={`${proyect.github}`}
+			  target="_blank"
+              class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-black transition rounded-lg hover:bg-opacity-70"
+            >
+              <Github />
+              <span class="ml-1">Código</span>
+            </a>
+            <a
+              href={`${proyect.web}`}
+              class="inline-flex ml-2 items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-500 transition rounded-lg hover:bg-opacity-70 "
+            >
+              <Web />
+              <span class="ml-1">Demo</span>
+            </a>
+          </div>
+        </div>
+      ))
+    }
+  </section>
+  <footer class="mt-20 mb-12">
+    <p class="text-center text-2xl">Repositorio Completo: <a href="https://github.com/Nachorojo2015/Javascript-proyects" class="font-bold transition hover:text-zinc-500">Github</a></p>
+  </footer>
+</Layout>
