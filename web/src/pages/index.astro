@@ -7,34 +7,19 @@ import JavaScript from "../icons/JavaScript.astro";
 ---
 
 <Layout title="Proyectos con Javascript Vanilla">
-  <div class="absolute top-0 right-3 flex items-center gap-3">
-    <p class="font-bold">
-      Hecho por <a
-        href="https://www.linkedin.com/in/ignacio-gomez-523b03258/"
-        target="_blank"
-        class="text-blue-600 transition hover:text-blue-400"
-        >Ignacio Gómez Rodríguez</a
-      >
-    </p>
-    <img
-      src="https://avatars.githubusercontent.com/u/102544177?v=4"
-      alt="image-profile-github"
-      class="w-12 h-12 rounded-md"
-    />
-  </div>
   <section class="flex justify-center items-center mt-3">
-    <h1 class="font-bold text-3xl max-w-[230px]">
-      Proyectos hechos con JavaScript
+    <h1 class="font-bold text-center text-3xl max-w-[230px] mr-3">
+      PROYECTOS <br> SOLO
     </h1>
     <JavaScript />
   </section>
   <section class="mt-12 grid place-items-center grid-cols-3 gap-3">
     {
       PROYECTS.map((proyect) => (
-        <div class="max-w-[400px] bg-transpartent rounded-lg">
+        <div class="max-w-[400px] bg-transpartent">
           <a href={`${proyect.web}`}>
             <img
-              class="rounded-t-lg h-[300px] w-full object-contain bg-black bg-opacity-90"
+              class="rounded-t-lg h-[300px] w-full object-cover transition-all hover:rounded-t-none"
               src={`images/${proyect.name}-pick.png`}
               alt=""
             />
@@ -77,5 +62,20 @@ import JavaScript from "../icons/JavaScript.astro";
   </section>
   <footer class="mt-20 mb-12">
     <p class="text-center text-2xl">Repositorio Completo: <a target="_blank" href="https://github.com/Nachorojo2015/Javascript-proyects" class="font-bold transition hover:text-zinc-500">Github</a></p>
+    <div class="flex flex-col items-center justify-center mt-5 gap-3">
+      <p class="font-bold">
+        Hecho por <a
+          href="https://www.linkedin.com/in/ignacio-gomez-523b03258/"
+          target="_blank"
+          class="text-blue-600 transition hover:text-blue-400"
+          >Ignacio Gómez Rodríguez</a
+        >
+      </p>
+      <img
+        src="https://avatars.githubusercontent.com/u/102544177?v=4"
+        alt="image-profile-github"
+        class="w-12 h-12 rounded-md"
+      />
+    </div>
   </footer>
 </Layout>
