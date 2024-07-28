@@ -7,19 +7,25 @@ import JavaScript from "../icons/JavaScript.astro";
 ---
 
 <Layout title="Proyectos con Javascript Vanilla">
-  <section class="flex justify-center items-center mt-3">
-    <h1 class="font-bold text-center text-3xl max-w-[230px] mr-3">
-      PROYECTOS <br> SOLO
+  <section class="flex flex-wrap gap-5 justify-center items-center mt-12">
+    <h1 class="font-bold text-zinc-600 leading-10 text-center text-5xl">
+      PROYECTOS SOLO
     </h1>
     <JavaScript />
   </section>
-  <section class="mt-12 grid place-items-center grid-cols-3 gap-3">
+  <p class="text-center mt-6 font-[600]">
+    Una iniciativa para mejorar en lógica de programación y demostrar una buena
+    calidad de proyectos sin el uso de frameworks o librerías externas.
+  </p>
+  <section
+    class="mt-12 grid place-items-center xl:grid-cols-3 gap-3 grid-cols-1 px-2"
+  >
     {
       PROYECTS.map((proyect) => (
         <div class="max-w-[400px] bg-transpartent">
           <a href={`${proyect.web}`}>
             <img
-              class="rounded-t-lg h-[300px] w-full object-cover transition-all hover:rounded-t-none"
+              class="rounded-lg h-[300px] w-full object-cover transition-all hover:rounded-none"
               src={`images/${proyect.name}-pick.png`}
               alt=""
             />
@@ -42,7 +48,7 @@ import JavaScript from "../icons/JavaScript.astro";
             </div>
             <a
               href={`${proyect.github}`}
-			  target="_blank"
+              target="_blank"
               class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-black transition rounded-lg hover:bg-opacity-70"
             >
               <Github />
@@ -61,7 +67,12 @@ import JavaScript from "../icons/JavaScript.astro";
     }
   </section>
   <footer class="mt-20 mb-12">
-    <p class="text-center text-2xl">Repositorio Completo: <a target="_blank" href="https://github.com/Nachorojo2015/Javascript-proyects" class="font-bold transition hover:text-zinc-500">Github</a></p>
+    <p class="text-center text-2xl">
+      Repositorio Completo: <a
+        target="_blank"
+        href="https://github.com/Nachorojo2015/Javascript-proyects"
+        class="font-bold transition hover:text-zinc-500">Github</a>
+    </p>
     <div class="flex flex-col items-center justify-center mt-5 gap-3">
       <p class="font-bold">
         Hecho por <a
