@@ -1,0 +1,48 @@
+---
+import Github from "../icons/Github.astro" 
+import Web from "../icons/Web.astro"
+
+const { web, name, title, description, tags, github } = Astro.props;
+---
+
+<div class="max-w-[400px]">
+    <a href={web}>
+      <img
+        class="rounded-lg object-cover w-full aspect-video bg-black"
+        src={`images/${name}-pick.png`}
+        alt=""
+      />
+    </a>
+    <div class="p-5">
+      <a href={web}>
+        <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white transition hover:text-blue-500">
+          {title}
+        </h5>
+      </a>
+      <p class="mb-4 font-normal text-gray-700 dark:text-gray-400">
+        {description}
+      </p>
+      <div class="mb-5 flex flex-wrap gap-3">
+        {tags.map((tag) => (
+          <span class="bg-zinc-200 p-1 px-2 rounded-md font-bold">
+            {tag}
+          </span>
+        ))}
+      </div>
+      <a
+        href={`${github}`}
+        target="_blank"
+        class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-black transition rounded-lg hover:bg-opacity-70"
+      >
+        <Github />
+        <span class="ml-1">Código</span>
+      </a>
+      <a
+        href={`${web}`}
+        class="inline-flex ml-2 items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-500 transition rounded-lg hover:bg-opacity-70 "
+      >
+        <Web />
+        <span class="ml-1">Demo</span>
+      </a>
+    </div>
+  </div>
