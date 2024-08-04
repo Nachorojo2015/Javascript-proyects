@@ -1,2 +1,2 @@
-<p>Hola soy Ignacio</p>
+<p align="center">Hola soy Ignacio</p>
 <hr>
