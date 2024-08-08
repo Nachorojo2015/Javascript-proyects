@@ -2,14 +2,12 @@
 import JavaScript from "../icons/JavaScript.astro";
 ---
 
-<section class="flex flex-wrap gap-5 justify-center items-center mt-12">
-  <h1
-    class="font-bold text-zinc-600 leading-10 text-center text-5xl tracking-in-expand-forward-top"
-  >
+<header class="flex flex-wrap gap-5 justify-center items-center mt-12 scale-up-vertical-center">
+  <h1 class="font-bold text-zinc-600 leading-10 text-center text-5xl">
     PROYECTOS SOLO
   </h1>
   <JavaScript />
-</section>
+</header>
 <p class="text-center mt-6 font-[600]">
   Una iniciativa para mejorar en lógica de programación y demostrar una buena
   calidad de proyectos sin el uso de frameworks o librerías externas.
@@ -23,27 +21,15 @@ import JavaScript from "../icons/JavaScript.astro";
   Twitter: @xsgames_
 ---------------------------------------------- */
 
-  .tracking-in-expand-forward-top {
-    animation: tracking-in-expand-forward-top 0.5s linear both;
+  .scale-up-vertical-center {
+    animation: scale-up-vertical-center 0.5s;
   }
-  @keyframes tracking-in-expand-forward-top {
+  @keyframes scale-up-vertical-center {
     0% {
-      letter-spacing: -0.2em;
-      transform: translateZ(-700px) translateY(-100px);
-      opacity: 0;
-    }
-    40% {
-      opacity: 0.6;
+      transform: scaleY(0.2);
     }
     100% {
-      transform: translateZ(0) translateY(0);
-      opacity: 1;
-    }
-  }
-
-  @media (width <= 768px) {
-    .tracking-in-expand-forward-top {
-      animation: none;
+      transform: scaleY(1);
     }
   }
 </style>
